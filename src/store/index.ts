@@ -1,13 +1,15 @@
-import {configureStore, combineReducers, ReducersMapObject} from "@reduxjs/toolkit"
-
-// Put slices in here
-const reducer = combineReducers<ReducersMapObject>({
-
-})
+import {configureStore} from "@reduxjs/toolkit"
+import { pokemonSlice } from "./pokemonSlice"
 
 // Store setup and config
 const store = configureStore({
-    reducer
+    reducer: {
+        pokemon: pokemonSlice.reducer
+    }
 })
 
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
 export default store
+

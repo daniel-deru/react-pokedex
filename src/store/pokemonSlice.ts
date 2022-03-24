@@ -5,14 +5,16 @@ interface Pokemon {
     url: string
 }
 
-let initialState: undefined | Pokemon[] = []
+let initialState: Pokemon[] = []
 
 export const pokemonSlice = createSlice({
     name: "pokemon",
     initialState,
     reducers: {
-        getPokemon: (state: undefined | Pokemon[] , action: PayloadAction<Pokemon[]>) => {
+        setPokemon: (state: Pokemon[] , action: PayloadAction<Pokemon[]>): void => {
             state = action.payload
         }
     }
 })
+
+export const { setPokemon } = pokemonSlice.actions
