@@ -1,35 +1,35 @@
 import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { setPokemon } from './store/pokemonSlice';
+import axios from 'axios';
 import './App.css';
 
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { setPokemon } from './store/pokemonSlice';
+
+
 import Header from './components/jsx/Header';
-import axios from 'axios';
+import Main from './components/jsx/Main';
+
 
 const App: React.FC = () => {
 
   const pokemon = useAppSelector(state => state.pokemon)
   const dispatch = useAppDispatch()
 
-  const getPokemon = (): void => {
-    // const pokemon = await axios("https://pokeapi.co/api/v2/pokemon?limit=890");
-    // console.log("This is the fetch data", pokemon.data.results)
-    // dispatch(setPokemon(pokemon.data.result))
-    // dispatch(setPokemon([{name: "Test", url: "test"}]))
-    dispatch(setPokemon(5))
+  const getPokemon = async (): Promise<void> => {
+    const pokemon = await axios("https://pokeapi.co/api/v2/pokemon?limit=890");
+    dispatch(setPokemon(pokemon.data.results))
   }
 
 
   useEffect(() => {
-    // console.log("This is the state before function", pokemon)
-    // console.log("this is the useeffect before fetch")
-    // getPokemon()
+    getPokemon()
+    console.log(pokemon)
+  }, [])
 
-    console.log("This is the pokemon state inside app", pokemon)
-  }, [pokemon])
   return (
     <div className="App" onClick={() => getPokemon()}>
-      <Header></Header>
+      <Header/>
+      <Main/>
     </div>
   );
 }

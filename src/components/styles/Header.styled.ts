@@ -1,6 +1,8 @@
 import styled from "styled-components"
 
 export const HeaderComponent = styled.header`
+    height: 15vh;
+    box-sizing: border-box;
     background-color: ${({theme}) => theme.colors.cream};
     display: flex;
     align-items: center;
