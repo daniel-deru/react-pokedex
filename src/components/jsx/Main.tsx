@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { MainComponent } from '../styles/Main.styled'
 import { setCurrentPokemon } from '../../store/currentPokemon'
+import { setDescription } from "../../store/descriptionSlice"
 
 
 interface StatInterface {
@@ -15,8 +16,9 @@ interface StatInterface {
 const Main: React.FC = () => {
   const currentPokemon = useAppSelector(state => state.currentPokemon)
   const pokemon = useAppSelector(state => state.pokemon)
+  const description = useAppSelector(state => state.description)
 
-  const [description, setDescription] = useState<string>("")
+  // const [description, setDescription] = useState<string>("")
   const [localPokemon, setLocalPokemon] = useState<any>(currentPokemon)
  
   
@@ -25,6 +27,11 @@ const Main: React.FC = () => {
   const moveCurrentPokemon = async (index: number): Promise<void> => {
     const requestPokemon: AxiosResponse = await axios(pokemon[index].url)
     dispatch(setCurrentPokemon(requestPokemon.data))
+
+    const requestDescription = await axios(requestPokemon.data.species.url)
+    const descriptions = requestDescription.data.flavor_text_entries
+    const englishDescriptions = descriptions.filter((entry: any): boolean => entry.language.name === "en")
+    dispatch(setDescription(englishDescriptions[0].flavor_text))
   }
 
   const toTitleCase = (word: string): string => `${word[0].toUpperCase()}${word.slice(1)}`
@@ -50,9 +57,17 @@ const Main: React.FC = () => {
             <ul>
               <li><b>Weight:</b> <span>{localPokemon?.weight}</span></li>
               <li><b>Height:</b> <span>{localPokemon?.height}</span></li>
-              <li><b>Type:</b> <span>{localPokemon?.types.map((type: any, index: number) => (
+              <li>
+                <b>Type:</b> <span>{localPokemon?.types.map((type: any, index: number) => (
                   index == localPokemon.types.length - 1 ? type.type.name : `${type.type.name}, `
-              ))}</span></li>
+                  ))}</span>
+              </li>
+              <li>
+                <b>Abilities:</b>
+                <span>{localPokemon.abilities.map((item: any, index: number) => (
+                  index == localPokemon.abilities.length - 1 ? item.ability.name : `${item.ability.name}, `
+                ))}</span>
+              </li>
               {localPokemon?.stats.map((stat: StatInterface) => (
                 <li key={stat.stat.name}><b>{stat.stat.name}:</b> <span>{stat.base_stat}</span></li>
               ))}

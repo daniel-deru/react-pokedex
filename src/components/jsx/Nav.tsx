@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { setCurrentPokemon } from '../../store/currentPokemon'
+import { setDescription } from '../../store/descriptionSlice'
 import { Pokemon } from '../../interfaces'
 import { NavComponent, PokemonList } from '../styles/Nav.styled'
 
@@ -25,6 +26,11 @@ const Nav: React.FC = () => {
     setShow(false)
     const requestPokemon = await axios(pokemon.url)
     dispatch(setCurrentPokemon(requestPokemon.data))
+
+    const requestDescription = await axios(requestPokemon.data.species.url)
+    const descriptions = requestDescription.data.flavor_text_entries
+    const englishDescriptions = descriptions.filter((entry: any): boolean => entry.language.name === "en")
+    dispatch(setDescription(englishDescriptions[0].flavor_text))
   }
 
   return (

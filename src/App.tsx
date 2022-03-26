@@ -4,6 +4,7 @@ import './App.css';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { setPokemon } from './store/pokemonSlice';
+import { setDescription } from './store/descriptionSlice';
 import { setCurrentPokemon } from './store/currentPokemon';
 
 
@@ -28,6 +29,11 @@ const App: React.FC = () => {
   const getCurrentPokemon = async (pokemonURL: string): Promise<void> => {
     const requestCurrentPokemon = await axios(pokemonURL)
     dispatch(setCurrentPokemon(requestCurrentPokemon.data))
+    
+    const requestDescription = await axios(requestCurrentPokemon.data.species.url)
+    dispatch(setDescription(requestDescription.data.flavor_text_entries[0].flavor_text))
+
+
   }
 
   const getDescription = async () => {
@@ -43,7 +49,7 @@ const App: React.FC = () => {
   }, [])
 
   return (
-    <div className="App" onClick={() => getPokemon()}>
+    <div className="App">
       <Header/>
       <Main/>
     </div>
