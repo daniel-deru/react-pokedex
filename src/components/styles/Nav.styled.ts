@@ -2,7 +2,6 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 export const NavComponent = styled.nav`
-/* position: relative; */
     svg {
         color: ${({theme}) => theme.colors.red};
         font-size: 2em;
@@ -12,7 +11,7 @@ export const NavComponent = styled.nav`
 
 export const PokemonList = styled(motion.ol)`
 position: absolute;
-height: 85vh;
+height: 0;
 overflow: auto;
 right: 0;
 top: 5rem;

@@ -4,6 +4,7 @@ import './App.css';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { setPokemon } from './store/pokemonSlice';
+import { setCurrentPokemon } from './store/currentPokemon';
 
 
 import Header from './components/jsx/Header';
@@ -13,17 +14,32 @@ import Main from './components/jsx/Main';
 const App: React.FC = () => {
 
   const pokemon = useAppSelector(state => state.pokemon)
+  const currentPokemon = useAppSelector(state => state.currentPokemon)
   const dispatch = useAppDispatch()
 
   const getPokemon = async (): Promise<void> => {
-    const pokemon = await axios("https://pokeapi.co/api/v2/pokemon?limit=890");
+    const pokemon = await axios("https://pokeapi.co/api/v2/pokemon?limit=1000");
     dispatch(setPokemon(pokemon.data.results))
+
+    if(!currentPokemon.name) getCurrentPokemon(pokemon.data.results[0]?.url)
+    
+  }
+
+  const getCurrentPokemon = async (pokemonURL: string): Promise<void> => {
+    const requestCurrentPokemon = await axios(pokemonURL)
+    dispatch(setCurrentPokemon(requestCurrentPokemon.data))
+  }
+
+  const getDescription = async () => {
+    const requestDescription = await axios(currentPokemon.species.url)
+    // setDescription(requestDescription.data.flavor_text_entries[0].flavor_text)
+
   }
 
 
   useEffect(() => {
     getPokemon()
-    console.log(pokemon)
+    
   }, [])
 
   return (

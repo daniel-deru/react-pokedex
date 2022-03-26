@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { AxiosResponse } from "axios"
 
-let initialState: object = {}
+let initialState: any = {}
 
 export const currentPokemonSlice = createSlice({
     name: "currentPokemon",
     initialState,
     reducers: {
 
-        setCurrentPokemon: (state: object , action: PayloadAction<object>) => {
+        setCurrentPokemon: (state: AxiosResponse<any> , action: PayloadAction<any>) => {
             state = action.payload
             return state
         }

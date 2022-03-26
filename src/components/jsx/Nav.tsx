@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { FaBars } from "react-icons/fa"
+import { FaBars, FaTimes } from "react-icons/fa"
 import axios from 'axios'
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
@@ -13,29 +13,30 @@ const Nav: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const listVariant = {
-    visible: (slide: number) => ({
-      x: slide
+    visible: (height: number) => ({
+      height: `${height}vh`,
+      transition: {
+        type: "linear"
+      }
     })
   }
 
   const getPokemonData = async (pokemon: Pokemon): Promise<void> => {
-    // console.log(pokemon.url)
+    setShow(false)
     const requestPokemon = await axios(pokemon.url)
-    // console.log(requestPokemon.data)
     dispatch(setCurrentPokemon(requestPokemon.data))
   }
 
-  useEffect(() => {
-  })
-
   return (
     <NavComponent>
-        <FaBars onClick={() => setShow(!show)}/>
+      <div onClick={() => setShow(!show)}>
+        {show ?  <FaTimes/> : <FaBars/>}
+      </div>
         <PokemonList
           
           variants={listVariant}
           animate="visible"
-          custom={show ? 0 : 300}
+          custom={show ? 85 : 0}
         >
           {pokemon.map((item, index) => (
             <li key={item.url} onClick={() => getPokemonData(item)}>{item.name}</li>
